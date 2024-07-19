@@ -20,7 +20,7 @@ MENU = {
 CARDIDS = "6666"
 CARDNUM = "11111"
 CARDIDE = "0000"
-CARD = []
+card = [{'id': '6666111110000', 'name': 'li', 'password': '123', 'money': 1100.22}, {'id': '6666111120000', 'name': 'wa', 'password': '123', 'money': 1.0}]
 STATUS = {"001":"非法访问","002":"密码错误","003":"卡号不存在","004":"余额不足","005":"撤销操作"}
 
 def menu(*args,**kwargs):
@@ -37,9 +37,9 @@ def create_account(*args,**kwargs):
     password = getpass.getpass("请输入您的密码：")
     money = float(input("请输入您的存款金额："))
     ID = CARDIDS + CARDNUM + CARDIDE
-    CARD.append({"id":ID,"name":name,"password":password,"money":money})
+    card.append({"id":ID,"name":name,"password":password,"money":money})
     CARDNUM = str(int(CARDNUM) + 1)
-    return True
+    return ID
 
 def update_money(*args,**kwargs):
     if args[0] == 1:
@@ -58,7 +58,6 @@ def update_money(*args,**kwargs):
                 index["money"] -= price
             else:
                 return STATUS["004"]    #004错误代码表示余额不足
-            index["money"] -= price
         else:
             return STATUS["001"]    #001错误代码表示非法访问
         return price
@@ -68,7 +67,7 @@ def transfer_money(*args,**kwargs):
     if index != "":
         otherid = input("请输入您要转账的卡号：")
         index2 = check_account(otherid)
-        if index2 != "":
+        if type(index2) != str:
             price = float(input("请输入您要转账的金额："))
             print(f"核对对方信息与转账金额：{index2['name']}的卡号{index2['id']}，您要转账{price}元")
             reok = input(f"请确认转账信息是否正确（Y/N）：")
@@ -83,27 +82,32 @@ def transfer_money(*args,**kwargs):
                 return STATUS["005"]    #005错误代码表示撤销操作
 
 def check_account(*args,**kwargs):
-    if args == "":
+    if not args:
         cardid = input("请输入您的卡号：")
     else:
         cardid = args[0]
-    for _ in CARD:
+    found = False
+    for _ in card:
         if _["id"] == cardid:
+            found = True
             if not args:
                 password = getpass.getpass("请输入您的密码：")
                 if _["password"] == password:
                     return _
-                return STATUS["002"]    #002错误代码表示密码错误
-            return _
-        return STATUS["003"]    #003错误代码表示卡号不存在
-
+                else:
+                    return STATUS["002"]    #002错误代码表示密码错误
+            else:
+                return _
+    if not found:  # 如果遍历完都没有找到匹配的卡号
+        return STATUS["003"]  # 003 错误代码表示卡号不存在
 #主函数
 if __name__ == '__main__':
     while True:
         print(menu())
         choice = input("请输入您的选择：")
         if choice == "1":
-            "开户成功" if create_account() else "开户失败"
+            re = create_account()
+            print(f"开户成功，您的卡号是{re},请妥善保管")
         elif choice == "2":
             re = update_money(1)
             print(f"存款成功，您存入的金额为{re}元") if type(re)!= str else print(re)
@@ -111,6 +115,7 @@ if __name__ == '__main__':
             re = update_money(0)
             print(f"取款成功，您取款的金额为{re}元") if type(re)!= str else print(re)
         elif choice == "4":
+            print(card)
             re = transfer_money()
             print("转账成功") if type(re)!= str else print(re)
         elif choice == "5":
@@ -119,5 +124,3 @@ if __name__ == '__main__':
             exit()
         else:
             print(STATUS["001"])    #001错误代码表示非法访问
-    else:
-        print(STATUS["001"])    #001错误代码表示非法访问
