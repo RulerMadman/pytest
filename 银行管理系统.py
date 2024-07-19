@@ -83,13 +83,13 @@ def transfer_money(*args,**kwargs):
                 return STATUS["005"]    #005错误代码表示撤销操作
 
 def check_account(*args,**kwargs):
-    if args[0] == "":
+    if args == "":
         cardid = input("请输入您的卡号：")
     else:
         cardid = args[0]
     for _ in CARD:
         if _["id"] == cardid:
-            if args[0] == "":
+            if not args:
                 password = getpass.getpass("请输入您的密码：")
                 if _["password"] == password:
                     return _
