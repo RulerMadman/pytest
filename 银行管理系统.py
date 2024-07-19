@@ -102,23 +102,22 @@ if __name__ == '__main__':
     while True:
         print(menu())
         choice = input("请输入您的选择：")
-        if choice in MENU:
-            if MENU[choice] == "1":
-                "开户成功" if create_account() else "开户失败"
-            elif MENU[choice] == "2":
-                re = update_money(1)
-                print(f"存款成功，您存入的金额为{re}元") if type(re)!= str else print(re)
-            elif MENU[choice] == "3":
-                re = update_money(0)
-                print(f"取款成功，您取款的金额为{re}元") if type(re)!= str else print(re)
-            elif MENU[choice] == "4":
-                re = transfer_money()
-                print("转账成功") if type(re)!= str else print(re)
-            elif MENU[choice] == "5":
-                print(check_account())
-            elif MENU[choice] == "6":
-                exit()
-            else:
-                print(STATUS["001"])    #001错误代码表示非法访问
+        if choice == "1":
+            "开户成功" if create_account() else "开户失败"
+        elif choice == "2":
+            re = update_money(1)
+            print(f"存款成功，您存入的金额为{re}元") if type(re)!= str else print(re)
+        elif choice == "3":
+            re = update_money(0)
+            print(f"取款成功，您取款的金额为{re}元") if type(re)!= str else print(re)
+        elif choice == "4":
+            re = transfer_money()
+            print("转账成功") if type(re)!= str else print(re)
+        elif choice == "5":
+            print(check_account())
+        elif choice == "6":
+            exit()
         else:
             print(STATUS["001"])    #001错误代码表示非法访问
+    else:
+        print(STATUS["001"])    #001错误代码表示非法访问
