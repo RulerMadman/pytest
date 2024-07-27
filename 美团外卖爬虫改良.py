@@ -84,7 +84,16 @@ def main():
 
 if __name__ == "__main__":
 
-    
+    DB_CONFIG = {
+        'host': '',
+        'port': 18445,
+        'user': '',
+        'password': '',
+        'database': '',
+        'charset': 'utf8mb4',
+        'connect_timeout': 30,
+        'salt': '',
+    }
 
     authenticator = UserAuthenticator(DB_CONFIG)
     authenticator.connect()
